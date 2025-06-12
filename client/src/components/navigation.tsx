@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "./theme-provider";
-import { Sun, Moon, Menu, X } from "lucide-react";
+import { Sun, Moon, Menu, X, Home, FolderOpen, Settings, User, Star, MessageSquare, FileText, Mail, ExternalLink } from "lucide-react";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
 
 export function Navigation() {
   const { theme, setTheme } = useTheme();
@@ -16,14 +24,19 @@ export function Navigation() {
   };
 
   const navigationItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'services', label: 'Services' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'testimonials', label: 'Testimonials' },
-    { id: 'blog', label: 'Blog' },
-    { id: 'contact', label: 'Contact' },
+    { id: 'home', label: 'Home', icon: Home },
+    { id: 'projects', label: 'Projects', icon: FolderOpen },
+    { id: 'services', label: 'Services', icon: Settings },
+    { id: 'experience', label: 'Experience', icon: User },
+    { id: 'skills', label: 'Skills', icon: Star },
+    { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
+    { id: 'blog', label: 'Blog', icon: FileText },
+    { id: 'contact', label: 'Contact', icon: Mail },
+  ];
+
+  const externalLinks = [
+    { href: 'https://github.com/aifordiscord', label: 'GitHub', icon: ExternalLink },
+    { href: 'https://discord.gg/yGzD5jVFMz', label: 'Discord Community', icon: ExternalLink },
   ];
 
   return (
@@ -41,19 +54,85 @@ export function Navigation() {
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="flex items-center space-x-8">
-              {navigationItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="hover:text-primary transition-colors"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
+          {/* Desktop Navigation with Menubar */}
+          <div className="hidden md:flex items-center">
+            <Menubar className="bg-transparent border-none">
+              <MenubarMenu>
+                <MenubarTrigger className="hover:bg-accent hover:text-accent-foreground">
+                  Navigation
+                </MenubarTrigger>
+                <MenubarContent>
+                  {navigationItems.map((item) => (
+                    <MenubarItem
+                      key={item.id}
+                      onClick={() => scrollToSection(item.id)}
+                      className="cursor-pointer"
+                    >
+                      <item.icon className="mr-2 h-4 w-4" />
+                      {item.label}
+                    </MenubarItem>
+                  ))}
+                </MenubarContent>
+              </MenubarMenu>
+
+              <MenubarMenu>
+                <MenubarTrigger className="hover:bg-accent hover:text-accent-foreground">
+                  Links
+                </MenubarTrigger>
+                <MenubarContent>
+                  {externalLinks.map((link) => (
+                    <MenubarItem key={link.href} asChild>
+                      <a 
+                        href={link.href} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="cursor-pointer"
+                      >
+                        <link.icon className="mr-2 h-4 w-4" />
+                        {link.label}
+                      </a>
+                    </MenubarItem>
+                  ))}
+                  <MenubarSeparator />
+                  <MenubarItem 
+                    onClick={() => window.open('mailto:contact@aifordiscord.dev', '_blank')}
+                    className="cursor-pointer"
+                  >
+                    <Mail className="mr-2 h-4 w-4" />
+                    Email Us
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+
+              <MenubarMenu>
+                <MenubarTrigger className="hover:bg-accent hover:text-accent-foreground">
+                  Theme
+                </MenubarTrigger>
+                <MenubarContent>
+                  <MenubarItem 
+                    onClick={() => setTheme('light')}
+                    className="cursor-pointer"
+                  >
+                    <Sun className="mr-2 h-4 w-4" />
+                    Light Mode
+                  </MenubarItem>
+                  <MenubarItem 
+                    onClick={() => setTheme('dark')}
+                    className="cursor-pointer"
+                  >
+                    <Moon className="mr-2 h-4 w-4" />
+                    Dark Mode
+                  </MenubarItem>
+                  <MenubarItem 
+                    onClick={() => setTheme('system')}
+                    className="cursor-pointer"
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    System
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+            </Menubar>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -61,7 +140,7 @@ export function Navigation() {
               variant="outline"
               size="icon"
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className="bg-background"
+              className="bg-background hidden md:flex"
             >
               {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             </Button>
@@ -86,11 +165,21 @@ export function Navigation() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="block px-3 py-2 text-base font-medium hover:text-primary transition-colors w-full text-left"
+                  className="flex items-center px-3 py-2 text-base font-medium hover:text-primary transition-colors w-full text-left"
                 >
+                  <item.icon className="mr-2 h-4 w-4" />
                   {item.label}
                 </button>
               ))}
+              <div className="border-t border-gray-200 dark:border-github-border mt-2 pt-2">
+                <button
+                  onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                  className="flex items-center px-3 py-2 text-base font-medium hover:text-primary transition-colors w-full text-left"
+                >
+                  {theme === "light" ? <Moon className="mr-2 h-4 w-4" /> : <Sun className="mr-2 h-4 w-4" />}
+                  Toggle Theme
+                </button>
+              </div>
             </div>
           </div>
         )}
