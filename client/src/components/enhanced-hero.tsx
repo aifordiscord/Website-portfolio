@@ -173,7 +173,7 @@ export function EnhancedHero() {
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
               <img 
-                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                src="https://i.ibb.co/j9mqKv8y/Screenshot-2025-05-30-23-43-01-49-4495e6112227b794374c62341ece5829.jpg" 
                 alt="Modern developer workspace showcasing Discord bot development" 
                 className="relative rounded-2xl shadow-2xl w-full h-auto group-hover:scale-105 transition-transform duration-300"
               />

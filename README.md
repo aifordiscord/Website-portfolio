@@ -196,10 +196,6 @@ const { data: repos } = useQuery({
 });
 ```
 
-### 💼 Services with Pricing
-- **Starter**: $299 - Basic Discord bot
-- **Professional**: $799 - Advanced features + AI
-- **Enterprise**: $1,999 - Full-stack solution
 
 ## ⚙️ Configuration
 
