@@ -5,7 +5,7 @@ import { ServicesSection } from "@/components/services-section";
 import { ExperienceSection } from "@/components/experience-section";
 import { SkillsSection } from "@/components/skills-section";
 import { TestimonialsSection } from "@/components/testimonials-section";
-import { BlogSection } from "@/components/blog-section";
+
 import { ContactSection } from "@/components/contact-section";
 import { Footer } from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
@@ -21,7 +21,7 @@ export default function Home() {
         <ExperienceSection />
         <SkillsSection />
         <TestimonialsSection />
-        <BlogSection />
+
         <ContactSection />
       </main>
       <Footer />

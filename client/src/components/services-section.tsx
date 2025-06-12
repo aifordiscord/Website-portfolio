@@ -18,8 +18,7 @@ export function ServicesSection() {
         "Welcome & leveling systems",
         "Database integration"
       ],
-      pricing: "Starting at $500",
-      timeline: "1-2 weeks",
+
       popular: true,
     },
     {
@@ -35,8 +34,7 @@ export function ServicesSection() {
         "Image generation",
         "Sentiment analysis"
       ],
-      pricing: "Starting at $800",
-      timeline: "2-3 weeks",
+
       popular: false,
     },
     {
@@ -52,8 +50,7 @@ export function ServicesSection() {
         "Interactive mini-games",
         "Voice channel automation"
       ],
-      pricing: "Starting at $600",
-      timeline: "1-2 weeks",
+
       popular: false,
     },
     {
@@ -69,8 +66,7 @@ export function ServicesSection() {
         "Authentication systems",
         "API development"
       ],
-      pricing: "Starting at $1200",
-      timeline: "3-4 weeks",
+
       popular: false,
     },
     {
@@ -86,8 +82,7 @@ export function ServicesSection() {
         "Alert systems",
         "Performance monitoring"
       ],
-      pricing: "Starting at $400",
-      timeline: "1 week",
+
       popular: false,
     },
     {
@@ -103,8 +98,7 @@ export function ServicesSection() {
         "24/7 monitoring",
         "Technical support"
       ],
-      pricing: "Starting at $50/month",
-      timeline: "Ongoing",
+
       popular: false,
     },
   ];
