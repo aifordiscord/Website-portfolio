@@ -18,7 +18,11 @@ export function Navigation() {
   const navigationItems = [
     { id: 'home', label: 'Home' },
     { id: 'projects', label: 'Projects' },
+    { id: 'services', label: 'Services' },
+    { id: 'experience', label: 'Experience' },
     { id: 'skills', label: 'Skills' },
+    { id: 'testimonials', label: 'Testimonials' },
+    { id: 'blog', label: 'Blog' },
     { id: 'contact', label: 'Contact' },
   ];
 
