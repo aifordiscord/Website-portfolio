@@ -46,9 +46,21 @@ export function ContactSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       toast({
         title: "Please fill in all required fields",
+        description: "Name, email, and message are required.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: "Invalid email address",
+        description: "Please enter a valid email address.",
         variant: "destructive",
       });
       return;
@@ -70,8 +82,8 @@ export function ContactSection() {
       icon: MessageCircle,
       title: "Discord",
       description: "Join my development community",
-      contact: "aifordiscord#1234",
-      link: "#",
+      contact: "discord.gg/yGzD5jVFMz",
+      link: "https://discord.gg/yGzD5jVFMz",
       color: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
     },
     {

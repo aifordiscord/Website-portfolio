@@ -31,9 +31,16 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <div className="text-xl font-bold gradient-text">aifordiscord</div>
+            <img 
+              src="https://i.ibb.co/j9mqKv8y/Screenshot-2025-05-30-23-43-01-49-4495e6112227b794374c62341ece5829.jpg" 
+              alt="AI for Discord Logo" 
+              className="w-8 h-8 mr-3 rounded-lg"
+            />
+            <div className="text-xl font-bold gradient-text">
+              aifordiscord
+            </div>
           </div>
-          
+
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="flex items-center space-x-8">
@@ -48,7 +55,7 @@ export function Navigation() {
               ))}
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <Button
               variant="outline"
@@ -58,7 +65,7 @@ export function Navigation() {
             >
               {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             </Button>
-            
+
             {/* Mobile menu button */}
             <Button
               variant="outline"
@@ -70,7 +77,7 @@ export function Navigation() {
             </Button>
           </div>
         </div>
-        
+
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 dark:border-github-border">

@@ -1,12 +1,9 @@
 import { Github, MessageCircle, Twitter, Linkedin } from "lucide-react";
 
 export function Footer() {
-
-
-
   const socialLinks = [
     { icon: Github, href: 'https://github.com/aifordiscord', label: 'GitHub' },
-    { icon: MessageCircle, href: '#', label: 'Discord' },
+    { icon: MessageCircle, href: 'https://discord.gg/yGzD5jVFMz', label: 'Discord' },
     { icon: Twitter, href: '#', label: 'Twitter' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
   ];
@@ -15,7 +12,14 @@ export function Footer() {
     <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-background border-t border-border">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col items-center text-center">
-          <div className="text-2xl font-bold gradient-text mb-4">aifordiscord</div>
+          <div className="flex items-center mb-4">
+            <img 
+              src="https://i.ibb.co/j9mqKv8y/Screenshot-2025-05-30-23-43-01-49-4495e6112227b794374c62341ece5829.jpg" 
+              alt="AI for Discord Logo" 
+              className="w-8 h-8 mr-3 rounded-lg"
+            />
+            <div className="text-2xl font-bold gradient-text">aifordiscord</div>
+          </div>
           <p className="text-muted-foreground mb-6 max-w-md">
             Building innovative Discord solutions and web applications with modern technologies and AI integration.
           </p>
