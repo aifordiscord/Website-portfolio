@@ -5,7 +5,7 @@ import { Resend } from 'resend';
 import { insertContactSchema } from "@shared/schema";
 import type { GitHubRepo, GitHubUser } from "@shared/schema";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // GitHub API proxy endpoints
@@ -231,7 +231,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const contact = await storage.createContact(validatedData);
 
       // Send email notification if API key is configured
-      if (process.env.RESEND_API_KEY) {
+      if (process.env.RESEND_API_KEY && resend) {
         try {
           await resend.emails.send({
             from: 'Portfolio Contact <onboarding@resend.dev>',
