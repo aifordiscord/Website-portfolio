@@ -1,3 +1,4 @@
+
 {
   "version": 2,
   "builds": [
@@ -16,10 +17,46 @@
       "dest": "/dist/public/$1"
     }
   ],
-  "outputDirectory": "dist/public",
   "buildCommand": "npm run build",
   "installCommand": "npm install",
+  "outputDirectory": "dist/public",
   "env": {
     "NODE_ENV": "production"
-  }
+  },
+  "functions": {
+    "dist/index.js": {
+      "runtime": "@vercel/node@20",
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
 }
