@@ -9,17 +9,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/github/user/:username", async (req, res) => {
     try {
       const { username } = req.params;
+      
+      // Debug logging
+      console.log('GitHub Token present:', !!process.env.GITHUB_TOKEN);
+      console.log('Token length:', process.env.GITHUB_TOKEN ? process.env.GITHUB_TOKEN.length : 0);
+      
+      const headers = {
+        'User-Agent': 'Portfolio-Website',
+        ...(process.env.GITHUB_TOKEN && {
+          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
+        })
+      };
+      
+      console.log('Request headers:', Object.keys(headers));
+      
       const response = await fetch(`https://api.github.com/users/${username}`, {
-        headers: {
-          'User-Agent': 'Portfolio-Website',
-          ...(process.env.GITHUB_TOKEN && {
-            'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
-          })
-        }
+        headers
       });
 
+      console.log('GitHub API response status:', response.status);
+      console.log('GitHub API response headers:', Object.fromEntries(response.headers.entries()));
+      
       if (!response.ok) {
         if (response.status === 403) {
+          console.log('Rate limited - using fallback data');
           // Return fallback data when rate limited
           const fallbackUser: GitHubUser = {
             login: username,
@@ -51,17 +64,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/github/repos/:username", async (req, res) => {
     try {
       const { username } = req.params;
+      
+      // Debug logging
+      console.log('Repos - GitHub Token present:', !!process.env.GITHUB_TOKEN);
+      
+      const headers = {
+        'User-Agent': 'Portfolio-Website',
+        ...(process.env.GITHUB_TOKEN && {
+          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
+        })
+      };
+      
       const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=20`, {
-        headers: {
-          'User-Agent': 'Portfolio-Website',
-          ...(process.env.GITHUB_TOKEN && {
-            'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
-          })
-        }
+        headers
       });
 
+      console.log('GitHub Repos API response status:', response.status);
+      
       if (!response.ok) {
         if (response.status === 403) {
+          console.log('Repos rate limited - using fallback data');
           // Return fallback repositories when rate limited
           const fallbackRepos: GitHubRepo[] = [
             {
