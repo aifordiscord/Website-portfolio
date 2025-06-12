@@ -103,12 +103,7 @@ export function ServicesSection() {
     },
   ];
 
-  const addOns = [
-    { name: "Source Code", price: "+$200", description: "Complete source code with documentation" },
-    { name: "Premium Support", price: "+$100/month", description: "Priority support and maintenance" },
-    { name: "Custom Integrations", price: "Quote on request", description: "Third-party API integrations" },
-    { name: "Training Session", price: "+$150", description: "1-hour setup and usage training" },
-  ];
+
 
   const scrollToContact = () => {
     const section = document.getElementById('contact');
@@ -163,39 +158,19 @@ export function ServicesSection() {
                 </div>
                 
                 <div className="border-t pt-4">
-                  <div className="flex justify-between items-center mb-4">
-                    <div>
-                      <div className="font-semibold text-lg text-primary">{service.pricing}</div>
-                      <div className="text-sm text-muted-foreground">Timeline: {service.timeline}</div>
-                    </div>
-                  </div>
-                  
                   <Button 
                     onClick={scrollToContact} 
                     className="w-full"
                     variant={service.popular ? "default" : "outline"}
                   >
-                    Get Quote
+                    Learn More
                   </Button>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
-        
-        {/* Add-ons Section */}
-        <div className="bg-background rounded-lg p-8 border border-border">
-          <h3 className="text-2xl font-semibold mb-6 text-center">Additional Services</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {addOns.map((addon, index) => (
-              <div key={index} className="text-center p-4 rounded-lg bg-muted/50">
-                <h4 className="font-medium mb-2">{addon.name}</h4>
-                <div className="text-primary font-semibold mb-2">{addon.price}</div>
-                <p className="text-sm text-muted-foreground">{addon.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+
         
         {/* Process Section */}
         <div className="mt-16">
