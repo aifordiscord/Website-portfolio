@@ -1,7 +1,7 @@
 import { Navigation } from "@/components/navigation";
 import { EnhancedHero } from "@/components/enhanced-hero";
 import { ProjectsSection } from "@/components/projects-section";
-import { ServicesSection } from "@/components/services-section";
+
 
 import { SkillsSection } from "@/components/skills-section";
 
@@ -17,7 +17,7 @@ export default function Home() {
       <main>
         <EnhancedHero />
         <ProjectsSection />
-        <ServicesSection />
+
         <SkillsSection />
 
         <ContactSection />

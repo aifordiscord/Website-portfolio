@@ -171,67 +171,7 @@ export function ServicesSection() {
           ))}
         </div>
 
-        
-        {/* Process Section */}
-        <div className="mt-16">
-          <h3 className="text-2xl font-semibold mb-8 text-center">Development Process</h3>
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              {
-                step: "1",
-                title: "Consultation",
-                description: "Discuss your requirements and project scope",
-                icon: "💬"
-              },
-              {
-                step: "2", 
-                title: "Planning",
-                description: "Create detailed project plan and timeline",
-                icon: "📋"
-              },
-              {
-                step: "3",
-                title: "Development",
-                description: "Build and test your custom solution",
-                icon: "⚡"
-              },
-              {
-                step: "4",
-                title: "Deployment",
-                description: "Launch and provide ongoing support",
-                icon: "🚀"
-              }
-            ].map((process, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                  {process.icon}
-                </div>
-                <div className="text-sm text-primary font-medium mb-2">Step {process.step}</div>
-                <h4 className="font-semibold mb-2">{process.title}</h4>
-                <p className="text-sm text-muted-foreground">{process.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* CTA Section */}
-        <div className="text-center mt-16 p-8 bg-primary/5 rounded-lg">
-          <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
-          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Let's discuss your project and bring your Discord community to the next level with custom bot solutions.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button onClick={scrollToContact} size="lg" className="bg-primary hover:bg-primary/90">
-              Start Your Project
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <a href="#portfolio" className="inline-flex items-center">
-                <Shield className="w-4 h-4 mr-2" />
-                View Previous Work
-              </a>
-            </Button>
-          </div>
-        </div>
+
       </div>
     </section>
   );
