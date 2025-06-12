@@ -235,7 +235,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           await resend.emails.send({
             from: 'Portfolio Contact <onboarding@resend.dev>',
-            to: ['contact@aifordiscord.dev'],
+            to: ['eswmanan@gmail.com'],
             subject: `New Contact Form: ${validatedData.subject || 'No Subject'}`,
             html: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
