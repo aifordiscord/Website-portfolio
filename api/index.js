@@ -11,10 +11,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Simple CORS middleware
 app.use((req, res, next) => {
-  const allowedOrigins = process.env.NODE_ENV === 'production' 
-    ? ['https://*.vercel.app', 'https://*.replit.app'] 
-    : ['http://localhost:5000', 'http://localhost:3000'];
-  
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
