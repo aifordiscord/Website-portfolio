@@ -23,17 +23,18 @@ export function ContactSection() {
     mutationFn: async (data: InsertContact) => {
       return apiRequest("POST", "/api/contact", data);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast({
         title: "Message sent successfully!",
-        description: "Thank you for your message. I'll get back to you soon.",
+        description: response.message || "Thank you for your message. I'll get back to you soon.",
       });
       setFormData({ name: "", email: "", subject: "", message: "" });
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      const errorMessage = error?.message || error?.error || "Please try again later.";
       toast({
         title: "Failed to send message",
-        description: error instanceof Error ? error.message : "Please try again later.",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -45,27 +46,6 @@ export function ContactSection() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      toast({
-        title: "Please fill in all required fields",
-        description: "Name, email, and message are required.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast({
-        title: "Invalid email address",
-        description: "Please enter a valid email address.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     contactMutation.mutate(formData);
   };
 

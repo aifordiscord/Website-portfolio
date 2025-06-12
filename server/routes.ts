@@ -1,35 +1,38 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { Resend } from 'resend';
 import { insertContactSchema } from "@shared/schema";
 import type { GitHubRepo, GitHubUser } from "@shared/schema";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // GitHub API proxy endpoints
   app.get("/api/github/user/:username", async (req, res) => {
     try {
       const { username } = req.params;
-      
+
       // Debug logging
       console.log('GitHub Token present:', !!process.env.GITHUB_TOKEN);
       console.log('Token length:', process.env.GITHUB_TOKEN ? process.env.GITHUB_TOKEN.length : 0);
-      
+
       const headers = {
         'User-Agent': 'Portfolio-Website',
         ...(process.env.GITHUB_TOKEN && {
           'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
         })
       };
-      
+
       console.log('Request headers:', Object.keys(headers));
-      
+
       const response = await fetch(`https://api.github.com/users/${username}`, {
         headers
       });
 
       console.log('GitHub API response status:', response.status);
       console.log('GitHub API response headers:', Object.fromEntries(response.headers.entries()));
-      
+
       if (!response.ok) {
         if (response.status === 403) {
           console.log('Rate limited - using fallback data');
@@ -64,23 +67,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/github/repos/:username", async (req, res) => {
     try {
       const { username } = req.params;
-      
+
       // Debug logging
       console.log('Repos - GitHub Token present:', !!process.env.GITHUB_TOKEN);
-      
+
       const headers = {
         'User-Agent': 'Portfolio-Website',
         ...(process.env.GITHUB_TOKEN && {
           'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
         })
       };
-      
+
       const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=20`, {
         headers
       });
 
       console.log('GitHub Repos API response status:', response.status);
-      
+
       if (!response.ok) {
         if (response.status === 403) {
           console.log('Repos rate limited - using fallback data');
@@ -169,7 +172,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const reposData: GitHubRepo[] = await response.json();
-      
+
       // Enhanced filtering and processing
       const filteredRepos = reposData
         .filter(repo => !repo.fork && !repo.archived && repo.stargazers_count >= 0)
@@ -181,7 +184,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
         })
         .slice(0, 20);
-      
+
       const totalStats = {
         total_repos: filteredRepos.length,
         total_stars: filteredRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0),
@@ -189,7 +192,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         languages: Array.from(new Set(filteredRepos.map(repo => repo.language).filter((lang): lang is string => Boolean(lang)))),
         last_updated: new Date().toISOString()
       };
-      
+
       res.json({
         repositories: filteredRepos,
         stats: totalStats
@@ -207,13 +210,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/contact", async (req, res) => {
     try {
       const validatedData = insertContactSchema.parse(req.body);
+      
+      // Validate required fields
+      if (!validatedData.name || !validatedData.email || !validatedData.message) {
+        return res.status(400).json({ 
+          error: "Missing required fields",
+          message: "Name, email, and message are required"
+        });
+      }
+
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(validatedData.email)) {
+        return res.status(400).json({ 
+          error: "Invalid email address",
+          message: "Please enter a valid email address"
+        });
+      }
+
       const contact = await storage.createContact(validatedData);
-      res.json({ success: true, message: "Contact form submitted successfully", id: contact.id });
+
+      // Send email notification if API key is configured
+      if (process.env.RESEND_API_KEY) {
+        try {
+          await resend.emails.send({
+            from: 'Portfolio Contact <onboarding@resend.dev>',
+            to: ['contact@aifordiscord.dev'],
+            subject: `New Contact Form: ${validatedData.subject || 'No Subject'}`,
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #333;">New Contact Form Submission</h2>
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                  <p><strong>Name:</strong> ${validatedData.name}</p>
+                  <p><strong>Email:</strong> ${validatedData.email}</p>
+                  <p><strong>Subject:</strong> ${validatedData.subject || 'No subject provided'}</p>
+                  <p><strong>Message:</strong></p>
+                  <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                    ${validatedData.message.replace(/\n/g, '<br>')}
+                  </div>
+                </div>
+                <p style="color: #666; font-size: 14px;">
+                  This message was sent from your portfolio contact form.
+                </p>
+              </div>
+            `,
+          });
+
+          // Send confirmation email to the sender
+          await resend.emails.send({
+            from: 'AI for Discord <onboarding@resend.dev>',
+            to: [validatedData.email],
+            subject: 'Thank you for your message!',
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #333;">Thank you for reaching out!</h2>
+                <p>Hi ${validatedData.name},</p>
+                <p>Thank you for your message. I've received your inquiry and will get back to you as soon as possible.</p>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                  <p><strong>Your message:</strong></p>
+                  <p style="font-style: italic;">"${validatedData.message}"</p>
+                </div>
+                <p>Best regards,<br>AI for Discord Team</p>
+                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                <p style="color: #666; font-size: 12px;">
+                  If you have any urgent questions, feel free to reach out directly at contact@aifordiscord.dev
+                </p>
+              </div>
+            `,
+          });
+        } catch (emailError) {
+          console.error('Failed to send email:', emailError);
+          // Don't fail the request if email sending fails
+        }
+      }
+
+      res.json({ 
+        success: true,
+        message: "Message sent successfully! I'll get back to you soon.",
+        id: contact.id
+      });
     } catch (error) {
-      console.error('Error handling contact form:', error);
+      console.error('Contact form error:', error);
       res.status(400).json({ 
         error: "Failed to submit contact form",
-        message: error instanceof Error ? error.message : "Unknown error"
+        message: error instanceof Error ? error.message : "Please try again later"
       });
     }
   });
