@@ -4,7 +4,7 @@ export function Footer() {
   const socialLinks = [
     { icon: Github, href: 'https://github.com/aifordiscord', label: 'GitHub' },
     { icon: MessageCircle, href: 'https://discord.gg/yGzD5jVFMz', label: 'Discord' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
+    { icon: Twitter , href: '#', label: 'Discord' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
   ];
 
@@ -21,7 +21,7 @@ export function Footer() {
             <div className="text-2xl font-bold gradient-text">aifordiscord</div>
           </div>
           <p className="text-muted-foreground mb-6 max-w-md">
-            Building innovative Discord solutions and web applications with modern technologies and AI integration.
+            Building innovative Discord solutions and web applications using ai.
           </p>
           <div className="flex space-x-4">
             {socialLinks.map((social) => (
@@ -40,7 +40,7 @@ export function Footer() {
         </div>
         
         <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
-          <p>&copy; 2024 aifordiscord. Built with modern web technologies and lots of ☕</p>
+          <p>&copy; 2025 aifordiscord. Built with modern web technologies using gpt4o & deepseek v3</p>
         </div>
       </div>
     </footer>
