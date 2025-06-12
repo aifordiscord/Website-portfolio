@@ -5,9 +5,7 @@
   "installCommand": "npm install --production=false",
   "functions": {
     "api/index.js": {
-      "runtime": "@vercel/node",
-      "memory": 1024,
-      "maxDuration": 30
+      "runtime": "nodejs20.x"
     }
   },
   "rewrites": [

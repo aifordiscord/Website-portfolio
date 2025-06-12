@@ -1,8 +1,6 @@
 // Vercel serverless function entry point
 const express = require('express');
-const { createServer } = require('http');
 const path = require('path');
-const cors = require('cors');
 
 // Import the main server logic
 const app = express();
@@ -10,12 +8,25 @@ const app = express();
 // Configure express for production
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
+
+// Simple CORS middleware
+app.use((req, res, next) => {
+  const allowedOrigins = process.env.NODE_ENV === 'production' 
     ? ['https://*.vercel.app', 'https://*.replit.app'] 
-    : ['http://localhost:5000', 'http://localhost:3000'],
-  credentials: true
-}));
+    : ['http://localhost:5000', 'http://localhost:3000'];
+  
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // GitHub API proxy endpoints with enhanced caching
