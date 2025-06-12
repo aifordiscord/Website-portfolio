@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { Code, MapPin, Zap, Github, Star, GitFork, Users } from "lucide-react";
-import type { GitHubUser } from "@shared/schema";
+import type { GitHubUser, GitHubReposResponse } from "@shared/schema";
 
 export function EnhancedHero() {
   const [typedText, setTypedText] = useState("");
@@ -21,7 +21,7 @@ export function EnhancedHero() {
     staleTime: 10 * 60 * 1000, // 10 minutes
   });
 
-  const { data: githubRepos, isLoading: reposLoading } = useQuery({
+  const { data: githubRepos, isLoading: reposLoading } = useQuery<GitHubReposResponse>({
     queryKey: ["/api/github/repos/aifordiscord"],
     staleTime: 10 * 60 * 1000, // 10 minutes
   });

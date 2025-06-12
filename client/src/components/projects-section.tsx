@@ -5,15 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Star, GitFork, ExternalLink, Github, AlertCircle } from "lucide-react";
-import type { GitHubRepo } from "@shared/schema";
+import type { GitHubRepo, GitHubReposResponse } from "@shared/schema";
 
 export function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState("all");
   
-  const { data: repos, isLoading, error } = useQuery<GitHubRepo[]>({
+  const { data: reposData, isLoading, error } = useQuery<GitHubReposResponse>({
     queryKey: ["/api/github/repos/aifordiscord"],
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
+
+  const repos = reposData?.repositories || [];
 
   const categorizeRepo = (repo: GitHubRepo): string => {
     const name = repo.name.toLowerCase();

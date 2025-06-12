@@ -51,12 +51,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const reposData: GitHubRepo[] = await response.json();
       
-      // Filter out forked repos and sort by stars
+      // Enhanced filtering and processing
       const filteredRepos = reposData
-        .filter(repo => !repo.name.includes('fork'))
-        .sort((a, b) => b.stargazers_count - a.stargazers_count);
+        .filter(repo => !repo.fork && !repo.archived && repo.stargazers_count >= 0)
+        .sort((a, b) => {
+          // Sort by stars first, then by recent activity
+          if (b.stargazers_count !== a.stargazers_count) {
+            return b.stargazers_count - a.stargazers_count;
+          }
+          return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+        })
+        .slice(0, 20);
       
-      res.json(filteredRepos);
+      const totalStats = {
+        total_repos: filteredRepos.length,
+        total_stars: filteredRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0),
+        total_forks: filteredRepos.reduce((sum, repo) => sum + repo.forks_count, 0),
+        languages: Array.from(new Set(filteredRepos.map(repo => repo.language).filter((lang): lang is string => Boolean(lang)))),
+        last_updated: new Date().toISOString()
+      };
+      
+      res.json({
+        repositories: filteredRepos,
+        stats: totalStats
+      });
     } catch (error) {
       console.error('Error fetching GitHub repos:', error);
       res.status(500).json({ 

@@ -45,6 +45,9 @@ export interface GitHubRepo {
   topics: string[];
   updated_at: string;
   homepage: string | null;
+  fork: boolean;
+  archived: boolean;
+  watchers_count: number;
 }
 
 export interface GitHubUser {
@@ -57,4 +60,15 @@ export interface GitHubUser {
   following: number;
   avatar_url: string;
   html_url: string;
+}
+
+export interface GitHubReposResponse {
+  repositories: GitHubRepo[];
+  stats: {
+    total_repos: number;
+    total_stars: number;
+    total_forks: number;
+    languages: string[];
+    last_updated: string;
+  };
 }
