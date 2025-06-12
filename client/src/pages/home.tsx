@@ -1,5 +1,5 @@
 import { Navigation } from "@/components/navigation";
-import { HeroSection } from "@/components/hero-section";
+import { EnhancedHero } from "@/components/enhanced-hero";
 import { ProjectsSection } from "@/components/projects-section";
 import { ServicesSection } from "@/components/services-section";
 import { ExperienceSection } from "@/components/experience-section";
@@ -8,13 +8,14 @@ import { TestimonialsSection } from "@/components/testimonials-section";
 import { BlogSection } from "@/components/blog-section";
 import { ContactSection } from "@/components/contact-section";
 import { Footer } from "@/components/footer";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 export default function Home() {
   return (
     <div className="min-h-screen">
       <Navigation />
       <main>
-        <HeroSection />
+        <EnhancedHero />
         <ProjectsSection />
         <ServicesSection />
         <ExperienceSection />
@@ -24,6 +25,7 @@ export default function Home() {
         <ContactSection />
       </main>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 }
