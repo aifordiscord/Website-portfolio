@@ -16,8 +16,13 @@ export function EnhancedHero() {
     "modern user experiences"
   ];
 
-  const { data: githubUser } = useQuery<GitHubUser>({
+  const { data: githubUser, isLoading: userLoading } = useQuery<GitHubUser>({
     queryKey: ["/api/github/user/aifordiscord"],
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+
+  const { data: githubRepos, isLoading: reposLoading } = useQuery({
+    queryKey: ["/api/github/repos/aifordiscord"],
     staleTime: 10 * 60 * 1000, // 10 minutes
   });
 
@@ -44,10 +49,31 @@ export function EnhancedHero() {
     }
   };
 
+  const totalStars = githubRepos?.stats?.total_stars || 0;
+  const formatNumber = (num: number) => {
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}k`;
+    return num.toString();
+  };
+
   const stats = [
-    { icon: Star, label: "GitHub Stars", value: githubUser ? "1.2k+" : "Loading..." },
-    { icon: GitFork, label: "Repositories", value: githubUser?.public_repos?.toString() || "Loading..." },
-    { icon: Users, label: "Followers", value: githubUser?.followers?.toString() || "Loading..." },
+    { 
+      icon: Star, 
+      label: "GitHub Stars", 
+      value: userLoading || reposLoading ? "Loading..." : formatNumber(totalStars),
+      trend: totalStars > 0 ? "+" : null
+    },
+    { 
+      icon: GitFork, 
+      label: "Repositories", 
+      value: userLoading ? "Loading..." : githubUser?.public_repos?.toString() || "0",
+      trend: (githubUser?.public_repos || 0) > 10 ? "+" : null
+    },
+    { 
+      icon: Users, 
+      label: "Followers", 
+      value: userLoading ? "Loading..." : formatNumber(githubUser?.followers || 0),
+      trend: (githubUser?.followers || 0) > 50 ? "+" : null
+    },
   ];
 
   return (
@@ -90,10 +116,25 @@ export function EnhancedHero() {
             {/* GitHub Stats */}
             <div className="grid grid-cols-3 gap-4 mb-8">
               {stats.map((stat, index) => (
-                <div key={index} className="text-center p-4 bg-muted/30 rounded-lg backdrop-blur-sm">
-                  <stat.icon className="w-5 h-5 mx-auto mb-2 text-muted-foreground" />
-                  <div className="font-semibold text-lg">{stat.value}</div>
+                <div key={index} className="text-center p-4 bg-muted/30 rounded-lg backdrop-blur-sm hover:bg-muted/40 transition-all duration-300 group">
+                  <stat.icon className="w-5 h-5 mx-auto mb-2 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <div className="font-semibold text-lg flex items-center justify-center gap-1">
+                    {stat.value}
+                    {stat.trend && (
+                      <span className="text-xs text-green-500 animate-pulse">{stat.trend}</span>
+                    )}
+                  </div>
                   <div className="text-xs text-muted-foreground">{stat.label}</div>
+                  {!userLoading && !reposLoading && stat.value !== "Loading..." && (
+                    <div className="mt-1 h-1 w-full bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-primary to-purple-500 rounded-full transition-all duration-1000 ease-out"
+                        style={{ 
+                          width: `${Math.min(100, index === 0 ? (totalStars / 100) * 100 : index === 1 ? Math.min(100, ((githubUser?.public_repos || 0) / 50) * 100) : Math.min(100, ((githubUser?.followers || 0) / 200) * 100))}%` 
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
