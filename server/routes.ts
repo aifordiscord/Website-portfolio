@@ -26,9 +26,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             name: "AI For Discord",
             bio: "Discord bot developer and AI enthusiast",
             location: "Global",
-            public_repos: 25,
-            followers: 150,
-            following: 50,
+            public_repos: 8,
+            followers: 12,
+            following: 15,
             avatar_url: "https://i.ibb.co/j9mqKv8y/Screenshot-2025-05-30-23-43-01-49-4495e6112227b794374c62341ece5829.jpg",
             html_url: `https://github.com/${username}`
           };
@@ -66,19 +66,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const fallbackRepos: GitHubRepo[] = [
             {
               id: 1,
-              name: "discord-ai-bot",
-              full_name: `${username}/discord-ai-bot`,
-              description: "Advanced Discord bot with AI integration and automation features",
-              html_url: `https://github.com/${username}/discord-ai-bot`,
-              stargazers_count: 45,
-              forks_count: 12,
+              name: "automod-bot",
+              full_name: `${username}/automod-bot`,
+              description: "Discord moderation bot with advanced auto-moderation features",
+              html_url: `https://github.com/${username}/automod-bot`,
+              stargazers_count: 5,
+              forks_count: 2,
               language: "JavaScript",
-              topics: ["discord", "ai", "bot", "automation"],
-              updated_at: "2024-01-15T10:30:00Z",
+              topics: ["discord", "moderation", "bot", "automation"],
+              updated_at: "2024-12-15T10:30:00Z",
               homepage: null,
               fork: false,
               archived: false,
-              watchers_count: 45
+              watchers_count: 5
             },
             {
               id: 2,
@@ -86,31 +86,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
               full_name: `${username}/portfolio-website`,
               description: "Modern portfolio website built with React and TypeScript",
               html_url: `https://github.com/${username}/portfolio-website`,
-              stargazers_count: 23,
-              forks_count: 7,
+              stargazers_count: 3,
+              forks_count: 1,
               language: "TypeScript",
               topics: ["react", "portfolio", "website", "typescript"],
-              updated_at: "2024-01-10T14:20:00Z",
+              updated_at: "2024-12-20T14:20:00Z",
               homepage: "https://aifordiscord.vercel.app",
               fork: false,
               archived: false,
-              watchers_count: 23
+              watchers_count: 3
             },
             {
               id: 3,
-              name: "discord-tools",
-              full_name: `${username}/discord-tools`,
-              description: "Collection of useful Discord development tools and utilities",
-              html_url: `https://github.com/${username}/discord-tools`,
-              stargazers_count: 18,
-              forks_count: 5,
+              name: "discord-music-bot",
+              full_name: `${username}/discord-music-bot`,
+              description: "Discord music bot with queue management and high-quality audio",
+              html_url: `https://github.com/${username}/discord-music-bot`,
+              stargazers_count: 7,
+              forks_count: 3,
               language: "Python",
-              topics: ["discord", "tools", "utilities", "development"],
-              updated_at: "2024-01-05T09:15:00Z",
+              topics: ["discord", "music", "bot", "audio"],
+              updated_at: "2024-12-10T09:15:00Z",
               homepage: null,
               fork: false,
               archived: false,
-              watchers_count: 18
+              watchers_count: 7
+            },
+            {
+              id: 4,
+              name: "discord-economy-bot",
+              full_name: `${username}/discord-economy-bot`,
+              description: "Economy system for Discord servers with gambling and shop features",
+              html_url: `https://github.com/${username}/discord-economy-bot`,
+              stargazers_count: 4,
+              forks_count: 1,
+              language: "JavaScript",
+              topics: ["discord", "economy", "bot", "gambling"],
+              updated_at: "2024-11-25T16:45:00Z",
+              homepage: null,
+              fork: false,
+              archived: false,
+              watchers_count: 4
             }
           ];
 
