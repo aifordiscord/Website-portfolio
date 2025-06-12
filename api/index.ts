@@ -1,30 +1,58 @@
-// Vercel serverless function entry point
-const express = require('express');
-const { createServer } = require('http');
-const path = require('path');
-const cors = require('cors');
+import { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Import the main server logic
-const app = express();
+// CORS headers for all responses
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
 
-// Configure express for production
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://*.vercel.app', 'https://*.replit.app'] 
-    : ['http://localhost:5000', 'http://localhost:3000'],
-  credentials: true
-}));
-app.use(express.static(path.join(__dirname, '../dist')));
+// Main handler function
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Set CORS headers
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
 
-// GitHub API proxy endpoints with enhanced caching
-app.get("/api/github/user/:username", async (req, res) => {
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  const { url, method } = req;
+  
   try {
-    const { username } = req.params;
+    // Route to appropriate handler based on URL path
+    if (url?.includes('/api/github/user/')) {
+      return await handleGitHubUser(req, res);
+    } else if (url?.includes('/api/github/repos/')) {
+      return await handleGitHubRepos(req, res);
+    } else if (url === '/api/contact' && method === 'POST') {
+      return await handleContact(req, res);
+    } else {
+      return res.status(404).json({ error: 'Not found' });
+    }
+  } catch (error) {
+    console.error('API Error:', error);
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}
+
+// GitHub user handler
+async function handleGitHubUser(req: VercelRequest, res: VercelResponse) {
+  try {
+    const url = req.url || '';
+    const username = url.split('/').pop();
+    
+    if (!username) {
+      return res.status(400).json({ error: 'Username is required' });
+    }
     
     // Set cache headers for GitHub API responses
-    res.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
     
     const response = await fetch(`https://api.github.com/users/${username}`, {
       headers: {
@@ -64,22 +92,28 @@ app.get("/api/github/user/:username", async (req, res) => {
       }
     };
     
-    res.json(enhancedData);
+    return res.json(enhancedData);
   } catch (error) {
     console.error('Error fetching GitHub user:', error);
-    res.status(500).json({ 
+    return res.status(500).json({ 
       error: "Failed to fetch GitHub user data",
       message: error instanceof Error ? error.message : "Unknown error"
     });
   }
-});
+}
 
-app.get("/api/github/repos/:username", async (req, res) => {
+// GitHub repos handler
+async function handleGitHubRepos(req: VercelRequest, res: VercelResponse) {
   try {
-    const { username } = req.params;
+    const url = req.url || '';
+    const username = url.split('/').pop();
+    
+    if (!username) {
+      return res.status(400).json({ error: 'Username is required' });
+    }
     
     // Set cache headers
-    res.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200');
+    res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200');
     
     const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=50&type=owner`, {
       headers: {
@@ -111,8 +145,8 @@ app.get("/api/github/repos/:username", async (req, res) => {
     
     // Enhanced filtering and processing
     const filteredRepos = reposData
-      .filter(repo => !repo.fork && !repo.archived && repo.stargazers_count >= 0)
-      .sort((a, b) => {
+      .filter((repo: any) => !repo.fork && !repo.archived && repo.stargazers_count >= 0)
+      .sort((a: any, b: any) => {
         // Sort by stars first, then by recent activity
         if (b.stargazers_count !== a.stargazers_count) {
           return b.stargazers_count - a.stargazers_count;
@@ -120,7 +154,7 @@ app.get("/api/github/repos/:username", async (req, res) => {
         return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
       })
       .slice(0, 20)
-      .map(repo => ({
+      .map((repo: any) => ({
         ...repo,
         computed_metrics: {
           popularity_score: repo.stargazers_count * 3 + repo.forks_count * 2 + (repo.watchers_count || 0),
@@ -132,42 +166,28 @@ app.get("/api/github/repos/:username", async (req, res) => {
     
     const totalStats = {
       total_repos: filteredRepos.length,
-      total_stars: filteredRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0),
-      total_forks: filteredRepos.reduce((sum, repo) => sum + repo.forks_count, 0),
-      languages: [...new Set(filteredRepos.map(repo => repo.language).filter(Boolean))],
+      total_stars: filteredRepos.reduce((sum: number, repo: any) => sum + repo.stargazers_count, 0),
+      total_forks: filteredRepos.reduce((sum: number, repo: any) => sum + repo.forks_count, 0),
+      languages: [...new Set(filteredRepos.map((repo: any) => repo.language).filter(Boolean))],
       last_updated: new Date().toISOString()
     };
     
-    res.json({
+    return res.json({
       repositories: filteredRepos,
       stats: totalStats
     });
   } catch (error) {
     console.error('Error fetching GitHub repos:', error);
-    res.status(500).json({ 
+    return res.status(500).json({ 
       error: "Failed to fetch GitHub repositories",
       message: error instanceof Error ? error.message : "Unknown error"
     });
   }
-});
-
-// Helper function to determine activity level
-function getActivityLevel(updatedAt) {
-  const now = new Date();
-  const lastUpdate = new Date(updatedAt);
-  const daysSinceUpdate = (now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24);
-  
-  if (daysSinceUpdate <= 7) return 'very-active';
-  if (daysSinceUpdate <= 30) return 'active';
-  if (daysSinceUpdate <= 90) return 'moderate';
-  return 'inactive';
 }
 
-// Contact form endpoint (simplified for Vercel)
-app.post("/api/contact", async (req, res) => {
+// Contact form handler
+async function handleContact(req: VercelRequest, res: VercelResponse) {
   try {
-    // For Vercel deployment, we'll just validate and return success
-    // In production, you might want to integrate with a service like Formspree or EmailJS
     const { name, email, subject, message } = req.body;
     
     if (!name || !email || !message) {
@@ -180,24 +200,28 @@ app.post("/api/contact", async (req, res) => {
     // Log the contact form submission (in production, send to email service)
     console.log('Contact form submission:', { name, email, subject, message });
     
-    res.json({ 
+    return res.json({ 
       success: true, 
       message: "Contact form submitted successfully",
       id: Date.now()
     });
   } catch (error) {
     console.error('Error handling contact form:', error);
-    res.status(400).json({ 
+    return res.status(400).json({ 
       error: "Failed to submit contact form",
       message: error instanceof Error ? error.message : "Unknown error"
     });
   }
-});
+}
 
-// Serve React app for all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
-});
-
-// Export for Vercel
-module.exports = app;
+// Helper function to determine activity level
+function getActivityLevel(updatedAt: string): string {
+  const now = new Date();
+  const lastUpdate = new Date(updatedAt);
+  const daysSinceUpdate = (now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24);
+  
+  if (daysSinceUpdate <= 7) return 'very-active';
+  if (daysSinceUpdate <= 30) return 'active';
+  if (daysSinceUpdate <= 90) return 'moderate';
+  return 'inactive';
+}
