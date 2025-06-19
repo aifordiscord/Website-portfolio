@@ -1,7 +1,11 @@
 
-# 🚀 AI for Discord - Professional Portfolio
+# AIForDiscord Portfolio
 
-> A cutting-edge, responsive portfolio website showcasing Discord bot development services, built with React, TypeScript, and Tailwind CSS.
+[![Website Preview](./attached_assets/6853f5a799962c012520c52e_1750334073471.jpg)](https://aifordiscord.xyz)
+
+*Click the image above to visit the live website*
+
+A modern portfolio website showcasing AI-powered Discord solutions and web development projects. Built with React, TypeScript, and Express.js.
 
 <div align="center">
 
@@ -12,6 +16,10 @@
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 
 </div>
+
+## Live Demo
+
+Visit the live website: [https://aifordiscord.xyz](https://aifordiscord.xyz)
 
 ## ✨ Features
 
