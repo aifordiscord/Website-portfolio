@@ -338,7 +338,7 @@ MIT License - feel free to use this project for your own portfolio! 🎉
 
 ## 💬 Support & Community
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/aifordiscord/portfolio/issues)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/aifordiscord/Website-portfolio/issues)
 - 💬 **Discord**: [Join our community](https://discord.gg/yGzD5jVFMz)
 - 📧 **Email**: contact@aifordiscord.dev
 
