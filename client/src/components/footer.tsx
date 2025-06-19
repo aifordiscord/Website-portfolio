@@ -4,7 +4,7 @@ export function Footer() {
   const socialLinks = [
     { icon: Github, href: 'https://github.com/aifordiscord', label: 'GitHub' },
     { icon: MessageCircle, href: 'https://discord.gg/yGzD5jVFMz', label: 'Discord' },
-    { icon: Twitter , href: '#', label: 'Discord' },
+    { icon: Twitter , href: '#', label: 'Twitter' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
   ];
 
