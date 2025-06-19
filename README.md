@@ -110,7 +110,7 @@ For advanced deployment scenarios:
 
 1. **One-Click Deploy**:
    
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/aifordiscord/portfolio)
+   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/aifordiscord/pWebsite-portfolio)
 
 2. **Manual Deployment**:
    ```bash
