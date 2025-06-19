@@ -17,9 +17,9 @@ A modern portfolio website showcasing AI-powered Discord solutions and web devel
 
 </div>
 
-## Live Demo
-
-Visit the live website: [https://aifordiscord.xyz](https://aifordiscord.xyz)
+## website preview & links
+[![Join our Discord](https://img.shields.io/badge/Join_Our_Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/yGzD5jVFMz)
+[![Website preview ](https://img.shields.io/badge/🌐_aifordiscord.xyz-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://aifordiscord.xyz)
 
 ## ✨ Features
 
