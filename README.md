@@ -19,7 +19,7 @@ A modern portfolio website showcasing AI-powered Discord solutions and web devel
 
 ## website preview & links
 [![Join our Discord](https://img.shields.io/badge/Join_Our_Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/yGzD5jVFMz)
-[![Website preview ](https://img.shields.io/badge/🌐_aifordiscord.xyz-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://aifordiscord.xyz)
+[![Website preview ](https://img.shields.io/badge/🌐portfolio.aifordiscord.xyz-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://portfolio.aifordiscord.xyz/)
 
 ## ✨ Features
 
