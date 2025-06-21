@@ -1,5 +1,5 @@
 
-# AIForDiscord Portfolio
+# AIForDiscord Portfolio 
 
 [![Website Preview](./attached_assets/6853f5a799962c012520c52e_1750334073471.jpg)](https://aifordiscord.xyz)
 
